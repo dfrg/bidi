@@ -224,6 +224,9 @@ impl TestState {
 }
 
 #[derive(Debug)]
+// Fields are only read by the Debug impl when printing
+// failures and rustc ignores those uses.
+#[allow(dead_code)]
 struct Failure {
     index: usize,
     codepoints: Vec<char>,

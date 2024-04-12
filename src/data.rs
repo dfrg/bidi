@@ -230,16 +230,16 @@ const BRACKET_PAIRS: &[(u32, u32)] = &[
 
 fn opening_bracket(close: char) -> Option<char> {
     let c = close as u32;
-    if let Ok(idx) = BRACKET_PAIRS.binary_search_by(|x| (x.1 as u32).cmp(&c)) {
-        return Some(unsafe { core::char::from_u32_unchecked(BRACKET_PAIRS[idx].0 as u32) });
+    if let Ok(idx) = BRACKET_PAIRS.binary_search_by(|x| x.1.cmp(&c)) {
+        return Some(unsafe { core::char::from_u32_unchecked(BRACKET_PAIRS[idx].0) });
     }
     None
 }
 
 fn closing_bracket(open: char) -> Option<char> {
     let c = open as u32;
-    if let Ok(idx) = BRACKET_PAIRS.binary_search_by(|x| (x.0 as u32).cmp(&c)) {
-        return Some(unsafe { core::char::from_u32_unchecked(BRACKET_PAIRS[idx].1 as u32) });
+    if let Ok(idx) = BRACKET_PAIRS.binary_search_by(|x| x.0.cmp(&c)) {
+        return Some(unsafe { core::char::from_u32_unchecked(BRACKET_PAIRS[idx].1) });
     }
     None
 }

@@ -509,8 +509,8 @@ pub mod state {
                     bracket_pairs.sort_unstable_by(|a, b| a.0.cmp(&b.0));
                     for pair in bracket_pairs {
                         let mut pair_dir = ON;
-                        for i in pair.0 + 1..pair.1 {
-                            let dir = match types[i] {
+                        for &ty in &types[pair.0 + 1..pair.1] {
+                            let dir = match ty {
                                 EN | AN | AL | R => R,
                                 L => L,
                                 _ => ON,
@@ -547,18 +547,24 @@ pub mod state {
                         }
                         types[pair.0] = pair_dir;
                         types[pair.1] = pair_dir;
-                        for i in pair.0 + 1..pair.1 {
-                            let index = self.indices[i];
-                            if self.initial_classes[index] == NSM {
-                                types[i] = pair_dir;
+                        let pair_range = pair.0 + 1..pair.1;
+                        for (ty, index) in types[pair_range.clone()]
+                            .iter_mut()
+                            .zip(&self.indices[pair_range])
+                        {
+                            if self.initial_classes[*index] == NSM {
+                                *ty = pair_dir;
                             } else {
                                 break;
                             }
                         }
-                        for i in pair.1 + 1..len {
-                            let index = self.indices[i];
-                            if self.initial_classes[index] == NSM {
-                                types[i] = pair_dir;
+                        let pair_range = pair.1 + 1..len;
+                        for (ty, index) in types[pair_range.clone()]
+                            .iter_mut()
+                            .zip(&self.indices[pair_range])
+                        {
+                            if self.initial_classes[*index] == NSM {
+                                *ty = pair_dir;
                             } else {
                                 break;
                             }
